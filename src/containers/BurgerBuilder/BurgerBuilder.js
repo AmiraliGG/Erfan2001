@@ -6,7 +6,7 @@ import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import axios from "../../axios-orders";
-import * as burgerBuilderActions from "../../store/actions/index";
+import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
 import WithErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 class BurgerBuilder extends React.Component {
@@ -38,6 +38,8 @@ class BurgerBuilder extends React.Component {
     this.setState({ purchasing: false });
   };
   purchaseContinueHandler = () => {
+    this.props.onInitPurchase();
+    console.log("hello erfan")
     this.props.history.push("/checkout");
   };
 
@@ -95,18 +97,19 @@ class BurgerBuilder extends React.Component {
 }
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingredients,
-    price: state.totalPrice,
-    error:state.error
+    ings: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    error:state.burgerBuilder.error
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     onIngredientAdded: (ingName) =>
-      dispatch(burgerBuilderActions.addIngredient(ingName)),
+      dispatch(actions.addIngredient(ingName)),
     onIngredientRemoved: (ingName) =>
-      dispatch(burgerBuilderActions.removeIngredient(ingName)),
-      onInitIngredients:()=>dispatch(burgerBuilderActions.initIngredients())
+      dispatch(actions.removeIngredient(ingName)),
+      onInitIngredients:()=>dispatch(actions.initIngredients()),
+      onInitPurchase:()=>dispatch(actions.purchaseInit())
       
   };
 };
@@ -138,6 +141,12 @@ export default connect(
 // }
 //11:we should always put Provider outside of anythings(Redux)   <Provider>...........</Provider>
 
+
+//important codes
+// if (this.props.ings) {
+//   const purchasedRedirect = this.props.purchased ? (
+//     <Redirect to="/" /> //important
+//   ) : null;
 //--------------------------------------------------Additional Codes------------------------------
 // ingredients: {
 //   salad: 0,
