@@ -25,7 +25,7 @@ export const fetchIngredientsFailed=()=>{
 }
 export const initIngredients=()=>{
     return dispatch=>{
-    axios.get("http://localhost:8000/ingredients").then((response) => {//we can make error here
+    axios.get("http://localhost:3000/ingredients").then((response) => {//we can make error here
       dispatch(setIngredients(response.data))
     }).catch(error=>{
       dispatch(fetchIngredientsFailed())
