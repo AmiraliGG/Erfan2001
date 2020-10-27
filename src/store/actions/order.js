@@ -19,18 +19,11 @@ export const purchaseBurgerStart=()=>{
     }
 }
 export const purchaseBurger=(orderData,token)=>{
-    return (dispatch)=>{
-        dispatch(purchaseBurgerStart())
-        axios
-        .post("/orders?auth="+token, orderData)
-        .then((response) => {
-            console.log(response.data,"erfan")
-          dispatch(purchaseBurgerSuccess(response.data.name,orderData))
-        })
-        .catch((error) => {
-         dispatch(purchaseBurgerFail(error))
-        });
-    }
+   return{
+       type:actionTypes.PURCHASE_BURGER,
+       orderData:orderData,
+       token:token
+   }
 }
 export const purchaseInit=()=>{
     return{
@@ -55,21 +48,9 @@ export const fetchOrdersStart=()=>{
     }
 }
 export const fetchOrders=(token,userId)=>{
-    return (dispatch,getState)=>{
-        dispatch(fetchOrdersStart())
-        const queryParams="?auth="+token + "&orderBy='userId'&equalTo='"+userId + "'";
-        // console.log(getState().auth.token) ///    really important
-    axios
-    .get("/orders"+queryParams)
-    .then((res) => {
-      const fetchOrders = [];
-      for (let key in res.data) {
-          if(userId===res.data[key].userId){//az khodame   malee khodammeee :))))))))))))))))))))
-        fetchOrders.push({ ...res.data[key], id: key });
-      }
+    return{
+        type:actionTypes.PURCHASE_ORDERS,
+        token:token,
+        userId:userId
     }
-      dispatch(fetchOrdersSuccess(fetchOrders))
-    })
-    .catch((error) => dispatch(fetchOrdersFail(error)));
-}
 }

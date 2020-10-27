@@ -42,7 +42,7 @@ class Auth extends Component {
       },
     },
     isSignup:true,
-    id:1
+    id:0
   };
   componentDidMount(){
     if(!this.props.buildingBurger && this.props.authRedirectPath){
@@ -66,13 +66,17 @@ class Auth extends Component {
   submitHandler=(event)=>{
     event.preventDefault();
     Axios.get("http://localhost:3000/users").then(res=>{
-      // if(!res.data.length){ this.props.onAuth(this.state.controls.email.value,this.state.controls.password.value,this.state.isSignup,this.state.id)}
-      // else{
-      if(this.state.controls.email.value === res.data[0].email ){
-        this.setState({...this.state,id:res.data[0].id})
+      if(res.data.length){
+      let updated=res.data.find(item=>item.email===this.state.controls.email.value)
+      if(updated){
+        this.setState({...this.state,id:updated.id})
+      }else{
+        this.setState({...this.state,id:res.data.length+1})
       }
-      this.props.onAuth(this.state.controls.email.value,this.state.controls.password.value,this.state.isSignup,res.data[0].id)
-    // }
+      }else{
+        this.setState({...this.state,id:1})
+      }
+      this.props.onAuth(this.state.controls.email.value,this.state.controls.password.value,this.state.isSignup,this.state.id)
   })
   }
   SwitchAuthModeHandler=()=>{
